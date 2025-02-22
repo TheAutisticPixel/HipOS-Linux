@@ -1,0 +1,354 @@
+[gd_scene load_steps=18 format=2]
+
+[ext_resource path="res://shaders/skew.tres" type="Shader" id=1]
+[ext_resource path="res://shaders/stripes.tres" type="Shader" id=2]
+[ext_resource path="res://art/fonts/picotron.ttf" type="DynamicFontData" id=3]
+[ext_resource path="res://art/fonts/wendy.ttf" type="DynamicFontData" id=4]
+[ext_resource path="res://main/component_ui/h_container.tscn" type="PackedScene" id=5]
+[ext_resource path="res://main/component/btn_basic.tscn" type="PackedScene" id=6]
+[ext_resource path="res://main/scripts/start_menu.gd" type="Script" id=7]
+[ext_resource path="res://main/scripts/start_menu_button.gd" type="Script" id=8]
+[ext_resource path="res://main/scripts/main.gd" type="Script" id=9]
+[ext_resource path="res://main/scripts/taskbar.gd" type="Script" id=10]
+[ext_resource path="res://art/rects/rect_classic.png" type="Texture" id=11]
+[ext_resource path="res://art/icons/start.png" type="Texture" id=12]
+[ext_resource path="res://main/component_ui/v_container.tscn" type="PackedScene" id=13]
+
+[sub_resource type="ShaderMaterial" id=1]
+shader = ExtResource( 2 )
+shader_param/color_gap = Color( 0.25098, 0.25098, 0.25098, 0 )
+shader_param/color_stripe = Color( 0, 0, 0, 0.0980392 )
+shader_param/divisions = 25.0
+shader_param/stripe_bias = 2.0
+shader_param/speed = 0.02
+shader_param/angle = 0.7854
+shader_param/skew = 0.0
+
+[sub_resource type="DynamicFont" id=3]
+size = 8
+font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=4]
+size = 10
+font_data = ExtResource( 4 )
+
+[sub_resource type="ShaderMaterial" id=2]
+shader = ExtResource( 1 )
+shader_param/strength = -0.5
+
+[node name="main" type="Node2D"]
+script = ExtResource( 9 )
+
+[node name="bg" type="Node2D" parent="."]
+z_index = -4096
+
+[node name="wallpaper" type="ColorRect" parent="bg"]
+margin_left = -4140.0
+margin_top = -4077.0
+margin_right = 7915.0
+margin_bottom = 3233.0
+color = Color( 0.0862745, 0.0862745, 0.121569, 1 )
+
+[node name="wallpaper2" type="ColorRect" parent="bg"]
+material = SubResource( 1 )
+margin_left = -60.0
+margin_top = -269.0
+margin_right = 736.0
+margin_bottom = 527.0
+color = Color( 0.0862745, 0.0862745, 0.121569, 1 )
+
+[node name="window_container" type="Control" parent="."]
+
+[node name="start_menu" type="Control" parent="."]
+script = ExtResource( 7 )
+
+[node name="container" type="NinePatchRect" parent="start_menu"]
+margin_left = 21.0
+margin_top = 319.0
+margin_right = 297.0
+margin_bottom = 366.0
+rect_clip_content = true
+texture = ExtResource( 11 )
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 2
+patch_margin_bottom = 2
+
+[node name="ColorRect" type="ColorRect" parent="start_menu/container"]
+show_behind_parent = true
+margin_left = -28.0
+margin_top = -18.0
+margin_right = 274.0
+margin_bottom = 381.0
+mouse_filter = 2
+color = Color( 0, 0, 0, 1 )
+
+[node name="h_container" parent="start_menu/container" instance=ExtResource( 13 )]
+position = Vector2( 5, 5 )
+spacing = 2
+
+[node name="btn" parent="start_menu/container/h_container" instance=ExtResource( 6 )]
+margin_right = 138.0
+margin_bottom = 16.0
+rect_clip_content = true
+script = ExtResource( 8 )
+
+[node name="ColorRect" type="ColorRect" parent="start_menu/container/h_container/btn"]
+margin_right = 138.0
+margin_bottom = 27.0
+mouse_filter = 2
+
+[node name="text" type="Label" parent="start_menu/container/h_container/btn"]
+modulate = Color( 0, 0, 0, 1 )
+margin_left = 6.0
+margin_top = 4.0
+margin_right = 46.0
+margin_bottom = 18.0
+custom_fonts/font = SubResource( 3 )
+text = "Text editor"
+
+[node name="text2" type="Label" parent="start_menu/container/h_container/btn"]
+modulate = Color( 0, 0, 0, 1 )
+margin_left = 6.0
+margin_top = 15.0
+margin_right = 61.0
+margin_bottom = 29.0
+custom_fonts/font = SubResource( 4 )
+text = "Write down your introspection..."
+
+[node name="btn2" parent="start_menu/container/h_container" instance=ExtResource( 6 )]
+margin_right = 138.0
+margin_bottom = 16.0
+rect_clip_content = true
+script = ExtResource( 8 )
+
+[node name="ColorRect" type="ColorRect" parent="start_menu/container/h_container/btn2"]
+margin_right = 138.0
+margin_bottom = 27.0
+mouse_filter = 2
+
+[node name="text" type="Label" parent="start_menu/container/h_container/btn2"]
+modulate = Color( 0, 0, 0, 1 )
+margin_left = 6.0
+margin_top = 4.0
+margin_right = 46.0
+margin_bottom = 18.0
+custom_fonts/font = SubResource( 3 )
+text = "File browser"
+
+[node name="text2" type="Label" parent="start_menu/container/h_container/btn2"]
+modulate = Color( 0, 0, 0, 1 )
+margin_left = 6.0
+margin_top = 15.0
+margin_right = 66.0
+margin_bottom = 29.0
+custom_fonts/font = SubResource( 4 )
+text = "Stores anything"
+
+[node name="btn3" parent="start_menu/container/h_container" instance=ExtResource( 6 )]
+margin_right = 138.0
+margin_bottom = 16.0
+rect_clip_content = true
+script = ExtResource( 8 )
+
+[node name="ColorRect" type="ColorRect" parent="start_menu/container/h_container/btn3"]
+margin_right = 138.0
+margin_bottom = 27.0
+mouse_filter = 2
+
+[node name="text" type="Label" parent="start_menu/container/h_container/btn3"]
+modulate = Color( 0, 0, 0, 1 )
+margin_left = 6.0
+margin_top = 4.0
+margin_right = 46.0
+margin_bottom = 18.0
+custom_fonts/font = SubResource( 3 )
+text = "Settings"
+
+[node name="text2" type="Label" parent="start_menu/container/h_container/btn3"]
+modulate = Color( 0, 0, 0, 1 )
+margin_left = 6.0
+margin_top = 15.0
+margin_right = 46.0
+margin_bottom = 29.0
+custom_fonts/font = SubResource( 4 )
+text = "Set your things"
+
+[node name="btn4" parent="start_menu/container/h_container" instance=ExtResource( 6 )]
+margin_right = 138.0
+margin_bottom = 16.0
+rect_clip_content = true
+script = ExtResource( 8 )
+
+[node name="ColorRect" type="ColorRect" parent="start_menu/container/h_container/btn4"]
+margin_right = 138.0
+margin_bottom = 27.0
+mouse_filter = 2
+
+[node name="text" type="Label" parent="start_menu/container/h_container/btn4"]
+modulate = Color( 0, 0, 0, 1 )
+margin_left = 6.0
+margin_top = 4.0
+margin_right = 46.0
+margin_bottom = 18.0
+custom_fonts/font = SubResource( 3 )
+text = "Space Map"
+
+[node name="text2" type="Label" parent="start_menu/container/h_container/btn4"]
+modulate = Color( 0, 0, 0, 1 )
+margin_left = 6.0
+margin_top = 15.0
+margin_right = 46.0
+margin_bottom = 29.0
+custom_fonts/font = SubResource( 4 )
+text = "Is your lair safe?"
+
+[node name="btn5" parent="start_menu/container/h_container" instance=ExtResource( 6 )]
+margin_right = 138.0
+margin_bottom = 16.0
+rect_clip_content = true
+script = ExtResource( 8 )
+
+[node name="ColorRect" type="ColorRect" parent="start_menu/container/h_container/btn5"]
+margin_right = 138.0
+margin_bottom = 27.0
+mouse_filter = 2
+
+[node name="text" type="Label" parent="start_menu/container/h_container/btn5"]
+modulate = Color( 0, 0, 0, 1 )
+margin_left = 6.0
+margin_top = 4.0
+margin_right = 46.0
+margin_bottom = 18.0
+custom_fonts/font = SubResource( 3 )
+text = "Communications"
+
+[node name="text2" type="Label" parent="start_menu/container/h_container/btn5"]
+modulate = Color( 0, 0, 0, 1 )
+margin_left = 6.0
+margin_top = 15.0
+margin_right = 46.0
+margin_bottom = 29.0
+custom_fonts/font = SubResource( 4 )
+text = "Communications in domination"
+
+[node name="btn6" parent="start_menu/container/h_container" instance=ExtResource( 6 )]
+margin_right = 138.0
+margin_bottom = 16.0
+rect_clip_content = true
+script = ExtResource( 8 )
+
+[node name="ColorRect" type="ColorRect" parent="start_menu/container/h_container/btn6"]
+margin_right = 138.0
+margin_bottom = 27.0
+mouse_filter = 2
+
+[node name="text" type="Label" parent="start_menu/container/h_container/btn6"]
+modulate = Color( 0, 0, 0, 1 )
+margin_left = 6.0
+margin_top = 4.0
+margin_right = 46.0
+margin_bottom = 18.0
+custom_fonts/font = SubResource( 3 )
+text = "Weaponry"
+
+[node name="text2" type="Label" parent="start_menu/container/h_container/btn6"]
+modulate = Color( 0, 0, 0, 1 )
+margin_left = 6.0
+margin_top = 15.0
+margin_right = 91.0
+margin_bottom = 29.0
+custom_fonts/font = SubResource( 4 )
+text = "View every weapon in this planet"
+
+[node name="btn7" parent="start_menu/container/h_container" instance=ExtResource( 6 )]
+margin_right = 221.0
+margin_bottom = 16.0
+rect_clip_content = true
+script = ExtResource( 8 )
+
+[node name="ColorRect" type="ColorRect" parent="start_menu/container/h_container/btn7"]
+margin_right = 257.0
+margin_bottom = 27.0
+mouse_filter = 2
+color = Color( 1, 0, 0, 1 )
+
+[node name="text" type="Label" parent="start_menu/container/h_container/btn7"]
+modulate = Color( 0, 0, 0, 1 )
+margin_left = 6.0
+margin_top = 4.0
+margin_right = 46.0
+margin_bottom = 18.0
+custom_fonts/font = SubResource( 3 )
+text = "Action Center"
+
+[node name="text2" type="Label" parent="start_menu/container/h_container/btn7"]
+modulate = Color( 0, 0, 0, 1 )
+margin_left = 6.0
+margin_top = 15.0
+margin_right = 51.0
+margin_bottom = 29.0
+custom_fonts/font = SubResource( 4 )
+text = "Select the planet's cosmic level action"
+
+[node name="btn_basic" parent="start_menu" instance=ExtResource( 6 )]
+margin_left = -19.0
+margin_top = 344.0
+margin_right = 21.0
+margin_bottom = 384.0
+
+[node name="Sprite" type="Sprite" parent="start_menu/btn_basic"]
+position = Vector2( 30, 9 )
+z_index = 2
+texture = ExtResource( 12 )
+
+[node name="title" type="Control" parent="start_menu"]
+margin_left = 180.0
+margin_top = 267.0
+margin_right = 282.0
+margin_bottom = 320.0
+rect_pivot_offset = Vector2( -191, -42 )
+rect_clip_content = true
+mouse_filter = 2
+
+[node name="ColorRect" type="ColorRect" parent="start_menu/title"]
+material = SubResource( 2 )
+margin_left = 5.0
+margin_top = 21.0
+margin_right = 112.0
+margin_bottom = 31.0
+
+[node name="text" type="Label" parent="start_menu/title"]
+modulate = Color( 0, 0, 0, 1 )
+margin_left = 8.0
+margin_top = 22.0
+margin_right = 63.0
+margin_bottom = 36.0
+custom_fonts/font = SubResource( 3 )
+text = "HipOS"
+
+[node name="taskbar" type="Node2D" parent="."]
+script = ExtResource( 10 )
+
+[node name="container" type="ColorRect" parent="taskbar"]
+margin_left = -5.0
+margin_top = 344.0
+margin_right = 715.0
+margin_bottom = 361.0
+mouse_filter = 2
+color = Color( 0, 0.415686, 1, 1 )
+
+[node name="btn_basic" parent="taskbar/container" instance=ExtResource( 6 )]
+margin_left = 42.0
+margin_right = 68.0
+margin_bottom = 17.0
+
+[node name="ColorRect" type="ColorRect" parent="taskbar/container"]
+margin_left = 28.0
+margin_right = 597.0
+margin_bottom = 19.0
+rect_clip_content = true
+color = Color( 1, 1, 1, 0 )
+
+[node name="v_container" parent="taskbar/container/ColorRect" instance=ExtResource( 5 )]
+spacing = 2

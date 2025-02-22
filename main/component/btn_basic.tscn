@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://main/component/scripts/btn_basic.gd" type="Script" id=1]
+
+[node name="btn_basic" type="NinePatchRect"]
+margin_right = 40.0
+margin_bottom = 40.0
+focus_mode = 2
+mouse_filter = 1
+script = ExtResource( 1 )
+
+[connection signal="mouse_entered" from="." to="." method="_on_btn_basic_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_btn_basic_mouse_exited"]
