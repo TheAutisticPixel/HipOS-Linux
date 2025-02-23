@@ -20,3 +20,6 @@ func _ready() -> void:
 	var startup_inst = startup.instance()
 	add_child(startup_inst)
 	
+func _physics_process(delta: float) -> void:
+	if Input.is_action_just_pressed("RIGHT_CLICK"):
+		global.make_notif("Hey hey hey... this is a test notification!!!. Go to the main script and disable this", null, Color.white)

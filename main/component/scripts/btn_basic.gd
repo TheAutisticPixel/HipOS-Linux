@@ -21,6 +21,7 @@ func is_click_release():
 		return true
 	else:
 		return false
+		
 func is_clicked():
 	if hovered and Input.is_action_just_pressed("CLICK"):
 		return true

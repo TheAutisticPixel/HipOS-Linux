@@ -1,5 +1,67 @@
-[gd_scene format=2]
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://art/twittervid.com_shitpost_2077_c5a266.ogv" type="VideoStream" id=1]
+[ext_resource path="res://main/contents_window/script/video_player.gd" type="Script" id=2]
+[ext_resource path="res://art/fonts/picotron.ttf" type="DynamicFontData" id=3]
+
+[sub_resource type="DynamicFont" id=1]
+size = 8
+font_data = ExtResource( 3 )
+
+[sub_resource type="StyleBoxFlat" id=2]
+bg_color = Color( 0, 0, 0, 1 )
+
+[sub_resource type="StyleBoxFlat" id=3]
+bg_color = Color( 0.490196, 0.490196, 0.490196, 1 )
 
 [node name="video_player" type="Control"]
-margin_right = 40.0
-margin_bottom = 40.0
+margin_right = 640.0
+margin_bottom = 360.0
+rect_clip_content = true
+script = ExtResource( 2 )
+
+[node name="ColorRect" type="ColorRect" parent="."]
+show_behind_parent = true
+margin_right = 937.0
+margin_bottom = 545.0
+mouse_filter = 2
+color = Color( 0, 0, 0, 1 )
+
+[node name="video" type="VideoPlayer" parent="."]
+show_behind_parent = true
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -359.0
+margin_top = 2.0
+margin_right = 121.0
+margin_bottom = 362.0
+rect_scale = Vector2( 0.675337, 0.675337 )
+stream = ExtResource( 1 )
+autoplay = true
+
+[node name="player" type="ColorRect" parent="."]
+margin_top = 204.0
+margin_right = 412.0
+margin_bottom = 225.0
+
+[node name="value" type="Label" parent="player"]
+modulate = Color( 0, 0, 0, 1 )
+margin_left = 12.0
+margin_top = 7.0
+margin_right = 102.0
+margin_bottom = 23.0
+custom_fonts/font = SubResource( 1 )
+text = "0:00/1:00"
+
+[node name="timeline" type="ProgressBar" parent="player"]
+margin_left = 62.0
+margin_top = 3.0
+margin_right = 382.0
+margin_bottom = 17.0
+custom_styles/fg = SubResource( 2 )
+custom_styles/bg = SubResource( 3 )
+max_value = 30.0
+value = 30.0
+percent_visible = false
+
+[connection signal="finished" from="video" to="." method="_on_video_finished"]

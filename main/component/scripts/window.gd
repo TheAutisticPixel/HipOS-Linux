@@ -217,10 +217,8 @@ func _on_Button_pressed() -> void:
 	global.kill_window(self.get_index())
 	global.taskbar_scene.refresh_windows()
 
-
 func _on_Button3_pressed() -> void:
 	fullscreen()
-
 
 func _on_Button2_pressed() -> void:
 	minimize()

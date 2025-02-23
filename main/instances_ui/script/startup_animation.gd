@@ -158,7 +158,10 @@ func _physics_process(delta: float) -> void:
 			$right.position -= Vector2(25,-25) 
 			$left.position += Vector2(25,-25)
 			$rand.position.x -= 35
+			global.main_scene.current_state = global.main_scene.states.main
+			
 			if info_count < -1:
+				global.main_scene.current_state = global.main_scene.states.main
 				queue_free()
 		else:
 			$wallpaper.modulate = $wallpaper.modulate.linear_interpolate(Color8(0,22,22255),delta * 5)
@@ -172,4 +175,5 @@ func _physics_process(delta: float) -> void:
 				infos[i].visible_characters += 10
 		
 	if Input.is_action_just_pressed("CLICK"):
-		queue_free()
+		
+		finished = true

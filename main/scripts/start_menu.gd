@@ -20,7 +20,7 @@ func _input(event: InputEvent) -> void:
 	for i in range(buttons.size()):
 		if buttons[i].is_clicked():
 			global.make_window(global.appname[i], global.apps[i], global.appicon[i])
-			
+			global.make_notif("You have started a program!!!", null, Color.white)
 			open = false
 			
 func _physics_process(delta: float) -> void:

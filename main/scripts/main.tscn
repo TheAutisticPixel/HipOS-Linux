@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=2]
+[gd_scene load_steps=37 format=2]
 
 [ext_resource path="res://shaders/outline.tres" type="Shader" id=1]
 [ext_resource path="res://shaders/stripes.tres" type="Shader" id=2]
@@ -20,6 +20,9 @@
 [ext_resource path="res://shaders/scroll.gdshader" type="Shader" id=18]
 [ext_resource path="res://art/icons/graphs.png" type="Texture" id=19]
 [ext_resource path="res://main/scripts/sprite.gd" type="Script" id=20]
+[ext_resource path="res://main/scripts/notification_messages.gd" type="Script" id=21]
+[ext_resource path="res://main/scripts/notif.gd" type="Script" id=22]
+[ext_resource path="res://main/component/btn_basic_polished.tscn" type="PackedScene" id=23]
 
 [sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 2 )
@@ -117,6 +120,12 @@ font_data = ExtResource( 4 )
 [sub_resource type="DynamicFont" id=5]
 size = 8
 font_data = ExtResource( 3 )
+
+[sub_resource type="StyleBoxFlat" id=13]
+bg_color = Color( 1, 1, 1, 0.0980392 )
+
+[sub_resource type="StyleBoxFlat" id=14]
+bg_color = Color( 0, 0, 0, 0 )
 
 [node name="main" type="Node2D"]
 script = ExtResource( 9 )
@@ -263,10 +272,10 @@ transform = Transform( -0.475728, -0.566743, 0.67267, 0.718634, 0.190545, 0.6687
 light_color = Color( 0.0470588, 0.137255, 0.352941, 1 )
 
 [node name="holo" type="NinePatchRect" parent="bg/sprite"]
-margin_left = 161.0
-margin_top = -161.0
-margin_right = 224.0
-margin_bottom = -82.0
+margin_left = -315.0
+margin_top = -265.0
+margin_right = -252.0
+margin_bottom = -186.0
 rect_clip_content = true
 texture = ExtResource( 17 )
 patch_margin_left = 2
@@ -345,7 +354,7 @@ custom_fonts/font = SubResource( 4 )
 text = "Write down your introspection..."
 
 [node name="h_container" parent="start_menu/container" instance=ExtResource( 13 )]
-position = Vector2( 5, 5 )
+position = Vector2( 5, 14 )
 spacing = 2
 
 [node name="settings" parent="start_menu/container" instance=ExtResource( 14 )]
@@ -481,55 +490,72 @@ margin_bottom = 18.0
 margin_right = 40.0
 margin_bottom = 40.0
 
-[node name="NinePatchRect" type="NinePatchRect" parent="."]
-visible = false
-margin_left = 413.0
+[node name="notification_messages" type="Control" parent="."]
+script = ExtResource( 21 )
+
+[node name="container" parent="notification_messages" instance=ExtResource( 13 )]
+position = Vector2( 0, 13 )
+lerp_speed = 0.2
+spacing = 0
+
+[node name="notif" type="NinePatchRect" parent="notification_messages"]
+margin_left = 411.0
 margin_top = 13.0
-margin_right = 623.0
-margin_bottom = 77.0
+margin_right = 621.0
+margin_bottom = 17.0
 rect_clip_content = true
 texture = ExtResource( 11 )
 patch_margin_left = 2
 patch_margin_top = 2
 patch_margin_right = 2
 patch_margin_bottom = 2
+script = ExtResource( 22 )
 
-[node name="wallpaper" type="ColorRect" parent="NinePatchRect"]
+[node name="bg" type="ColorRect" parent="notification_messages/notif"]
 show_behind_parent = true
-margin_left = -4140.0
-margin_top = -4077.0
-margin_right = 7915.0
-margin_bottom = 3233.0
+margin_left = -4125.0
+margin_top = -4075.0
+margin_right = 7930.0
+margin_bottom = 3235.0
 mouse_filter = 2
 color = Color( 0, 0, 0, 1 )
 
-[node name="text" type="Label" parent="NinePatchRect"]
-margin_left = 40.0
+[node name="timer" type="ProgressBar" parent="notification_messages/notif"]
+visible = false
+show_behind_parent = true
+margin_left = 214.0
+margin_top = 69.0
+margin_right = 436.0
+margin_bottom = 144.0
+rect_rotation = -180.0
+mouse_filter = 2
+custom_styles/fg = SubResource( 13 )
+custom_styles/bg = SubResource( 14 )
+max_value = 3.0
+step = 0.001
+value = 3.0
+percent_visible = false
+
+[node name="btn_basic_polished" parent="notification_messages/notif" instance=ExtResource( 23 )]
+show_behind_parent = true
+margin_left = 4.0
+margin_top = 4.0
+margin_right = 206.0
+margin_bottom = 22.0
+unhover_color = Color( 0, 0, 0, 0 )
+hover_color = Color( 1, 1, 1, 0.0980392 )
+
+[node name="text" type="Label" parent="notification_messages/notif"]
+margin_left = 12.0
 margin_top = 12.0
-margin_right = 200.0
-margin_bottom = 38.0
+margin_right = 203.0
+margin_bottom = 20.0
 custom_fonts/font = SubResource( 3 )
-text = "Chat now with HipB0T! Our latest
-AI Assisant built in HipOS!"
+text = "a"
+autowrap = true
 
-[node name="text2" type="Label" parent="NinePatchRect"]
-modulate = Color( 0.619608, 0.619608, 0.619608, 1 )
-margin_left = 10.0
-margin_top = 48.0
-margin_right = 170.0
-margin_bottom = 74.0
-custom_fonts/font = SubResource( 3 )
-text = "Dismiss"
+[node name="sprite" type="Sprite" parent="notification_messages/notif"]
+position = Vector2( 18, 22 )
 
-[node name="NinePatchRect" type="NinePatchRect" parent="NinePatchRect"]
-margin_left = 21.0
-margin_top = 11.0
-margin_right = 27.0
-margin_bottom = 17.0
-rect_rotation = 44.9999
-rect_scale = Vector2( 3, 3 )
-texture = ExtResource( 11 )
-patch_margin_left = 2
-patch_margin_top = 2
-patch_margin_right = 2
-patch_margin_bottom = 2
+[node name="anchor" type="Node2D" parent="notification_messages"]
+position = Vector2( 411, 13 )
