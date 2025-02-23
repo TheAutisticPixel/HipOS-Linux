@@ -16,6 +16,11 @@ func is_clicking():
 	else:
 		return false
 
+func is_click_release():
+	if hovered and Input.is_action_just_released("CLICK"):
+		return true
+	else:
+		return false
 func is_clicked():
 	if hovered and Input.is_action_just_pressed("CLICK"):
 		return true

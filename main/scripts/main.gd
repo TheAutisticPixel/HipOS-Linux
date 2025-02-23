@@ -19,3 +19,4 @@ func _ready() -> void:
 	global.main_scene = self
 	var startup_inst = startup.instance()
 	add_child(startup_inst)
+	

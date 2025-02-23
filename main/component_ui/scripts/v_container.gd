@@ -6,7 +6,8 @@ var active = true
 onready var rects = get_children()
 export var spacing = 5
 
-
+func refresh_rects():
+	rects = get_children()
 
 func _physics_process(delta: float) -> void:
 	if active:

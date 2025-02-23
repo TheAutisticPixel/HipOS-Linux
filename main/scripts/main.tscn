@@ -1,6 +1,6 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=32 format=2]
 
-[ext_resource path="res://shaders/skew.tres" type="Shader" id=1]
+[ext_resource path="res://shaders/outline.tres" type="Shader" id=1]
 [ext_resource path="res://shaders/stripes.tres" type="Shader" id=2]
 [ext_resource path="res://art/fonts/picotron.ttf" type="DynamicFontData" id=3]
 [ext_resource path="res://art/fonts/wendy.ttf" type="DynamicFontData" id=4]
@@ -13,6 +13,13 @@
 [ext_resource path="res://art/rects/rect_classic.png" type="Texture" id=11]
 [ext_resource path="res://art/icons/start.png" type="Texture" id=12]
 [ext_resource path="res://main/component_ui/v_container.tscn" type="PackedScene" id=13]
+[ext_resource path="res://main/component/button.tscn" type="PackedScene" id=14]
+[ext_resource path="res://art/icons/settings.png" type="Texture" id=15]
+[ext_resource path="res://main/scripts/viewport.gd" type="Script" id=16]
+[ext_resource path="res://art/rects/rect.png" type="Texture" id=17]
+[ext_resource path="res://shaders/scroll.gdshader" type="Shader" id=18]
+[ext_resource path="res://art/icons/graphs.png" type="Texture" id=19]
+[ext_resource path="res://main/scripts/sprite.gd" type="Script" id=20]
 
 [sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 2 )
@@ -24,6 +31,81 @@ shader_param/speed = 0.02
 shader_param/angle = 0.7854
 shader_param/skew = 0.0
 
+[sub_resource type="ShaderMaterial" id=8]
+shader = ExtResource( 1 )
+shader_param/color = Color( 0.482353, 0.623529, 1, 0.294118 )
+shader_param/width = 1.0
+shader_param/pattern = 1
+shader_param/inside = false
+shader_param/add_margins = true
+shader_param/number_of_images = Vector2( 1, 1 )
+
+[sub_resource type="ViewportTexture" id=6]
+viewport_path = NodePath("bg/sprite/Viewport")
+
+[sub_resource type="Environment" id=7]
+background_mode = 1
+
+[sub_resource type="Animation" id=9]
+resource_name = "7"
+length = 7.0
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("Spatial/CSGBox4:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 7 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector3( 0, 0, 0 ), Vector3( 360, 360, 360 ) ]
+}
+
+[sub_resource type="Animation" id=10]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("Spatial:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( 0, 0, 0 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Spatial/CSGBox4:rotation_degrees")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( 0, 0, 0 ) ]
+}
+
+[sub_resource type="ShaderMaterial" id=11]
+shader = ExtResource( 18 )
+shader_param/motion = Vector2( 0, 25 )
+shader_param/scale = 1.0
+shader_param/offset = Vector2( 66, 0 )
+
+[sub_resource type="ShaderMaterial" id=12]
+shader = ExtResource( 2 )
+shader_param/color_gap = Color( 0.25098, 0.25098, 0.25098, 0 )
+shader_param/color_stripe = Color( 1, 1, 1, 1 )
+shader_param/divisions = 25.0
+shader_param/stripe_bias = 2.0
+shader_param/speed = 0.04
+shader_param/angle = 0.7854
+shader_param/skew = 0.0
+
 [sub_resource type="DynamicFont" id=3]
 size = 8
 font_data = ExtResource( 3 )
@@ -32,9 +114,9 @@ font_data = ExtResource( 3 )
 size = 10
 font_data = ExtResource( 4 )
 
-[sub_resource type="ShaderMaterial" id=2]
-shader = ExtResource( 1 )
-shader_param/strength = -0.5
+[sub_resource type="DynamicFont" id=5]
+size = 8
+font_data = ExtResource( 3 )
 
 [node name="main" type="Node2D"]
 script = ExtResource( 9 )
@@ -51,11 +133,159 @@ color = Color( 0.0862745, 0.0862745, 0.121569, 1 )
 
 [node name="wallpaper2" type="ColorRect" parent="bg"]
 material = SubResource( 1 )
-margin_left = -60.0
+margin_left = -54.0
 margin_top = -269.0
-margin_right = 736.0
+margin_right = 742.0
 margin_bottom = 527.0
 color = Color( 0.0862745, 0.0862745, 0.121569, 1 )
+
+[node name="sprite" type="Sprite" parent="bg"]
+material = SubResource( 8 )
+position = Vector2( 320, 180 )
+texture = SubResource( 6 )
+script = ExtResource( 20 )
+
+[node name="Viewport" type="Viewport" parent="bg/sprite"]
+size = Vector2( 640, 360 )
+transparent_bg = true
+script = ExtResource( 16 )
+
+[node name="Spatial" type="Spatial" parent="bg/sprite/Viewport"]
+
+[node name="CSGBox4" type="CSGBox" parent="bg/sprite/Viewport/Spatial"]
+width = 1.0
+height = 1.0
+depth = 1.0
+
+[node name="CSGBox" type="CSGBox" parent="bg/sprite/Viewport/Spatial/CSGBox4"]
+height = 0.5
+depth = 0.5
+
+[node name="CSGBox2" type="CSGBox" parent="bg/sprite/Viewport/Spatial/CSGBox4"]
+transform = Transform( -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0 )
+height = 0.5
+depth = 0.5
+
+[node name="CSGBox3" type="CSGBox" parent="bg/sprite/Viewport/Spatial/CSGBox4"]
+transform = Transform( -4.37114e-08, -1, 0, -4.37114e-08, 1.91069e-15, -1, 1, -4.37114e-08, -4.37114e-08, 0, 0, 0 )
+height = 0.5
+depth = 0.5
+
+[node name="CSGTorus" type="CSGTorus" parent="bg/sprite/Viewport/Spatial"]
+inner_radius = 2.9
+sides = 32
+ring_sides = 3
+
+[node name="CSGBox" type="CSGBox" parent="bg/sprite/Viewport/Spatial/CSGTorus"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 4.42327, 0, 0 )
+height = 0.114536
+depth = 0.151074
+
+[node name="CSGBox2" type="CSGBox" parent="bg/sprite/Viewport/Spatial/CSGTorus"]
+transform = Transform( 0.964405, -1.15585e-08, -0.264429, 1.15585e-08, 1, -1.55589e-09, 0.264429, -1.55589e-09, 0.964405, 4.33641, 0, 0.991506 )
+height = 0.002
+depth = 0.151074
+
+[node name="CSGTorus2" type="CSGTorus" parent="bg/sprite/Viewport/Spatial"]
+transform = Transform( 0.635434, -0.669434, 0.384814, 0.474641, 0.731728, 0.489173, -0.609048, -0.128189, 0.782706, 0, 0, 0 )
+inner_radius = 2.9
+sides = 32
+ring_sides = 3
+
+[node name="CSGBox2" type="CSGBox" parent="bg/sprite/Viewport/Spatial/CSGTorus2"]
+transform = Transform( 0.964405, -3.72529e-08, -0.264429, -2.6077e-08, 1, 0, 0.264429, 1.3411e-07, 0.964405, 3.70952, -0.209233, 1.38307 )
+width = 0.370755
+height = 0.43548
+depth = 0.296527
+
+[node name="CSGBox3" type="CSGBox" parent="bg/sprite/Viewport/Spatial/CSGTorus2"]
+transform = Transform( 0.374955, -0.813985, 0.443664, 0.753852, -0.0108203, -0.656956, 0.539553, 0.580786, 0.609566, 2.56628, 0.0664401, 1.3605 )
+width = 0.370755
+height = 0.43548
+depth = 0.296527
+
+[node name="CSGBox4" type="CSGBox" parent="bg/sprite/Viewport/Spatial/CSGTorus2"]
+transform = Transform( 0.375841, -0.926244, -0.0285586, 0.788291, 0.335761, -0.51562, 0.487178, 0.171279, 0.856342, 3.11786, 0.290532, 1.14056 )
+width = 0.0994489
+height = 0.687136
+depth = 0.100879
+
+[node name="CSGTorus3" type="CSGTorus" parent="bg/sprite/Viewport/Spatial"]
+transform = Transform( 0.635434, -0.669434, 0.384814, 0.474641, 0.731728, 0.489173, -0.609048, -0.128189, 0.782706, 0, 0, 0 )
+inner_radius = 4.38659
+outer_radius = 4.39861
+sides = 32
+ring_sides = 3
+
+[node name="CSGTorus4" type="CSGTorus" parent="bg/sprite/Viewport/Spatial"]
+transform = Transform( -0.712828, -0.421353, -0.560658, 0.144906, -0.870646, 0.470083, -0.686206, 0.253846, 0.681677, 0, 0, 0 )
+inner_radius = 4.38659
+outer_radius = 4.39861
+sides = 32
+ring_sides = 3
+
+[node name="Spatial" type="Spatial" parent="bg/sprite/Viewport/Spatial"]
+transform = Transform( 0.464639, 0.877987, 0.115104, -0.798437, 0.359192, 0.483198, 0.382897, -0.316416, 0.867912, 0, 0, 0 )
+
+[node name="CSGCylinder" type="CSGCylinder" parent="bg/sprite/Viewport/Spatial/Spatial"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -23.0903, 0 )
+radius = 0.0187584
+height = 43.0516
+
+[node name="CSGTorus" type="CSGTorus" parent="bg/sprite/Viewport/Spatial/Spatial"]
+inner_radius = 2.73139
+sides = 64
+ring_sides = 4
+smooth_faces = false
+
+[node name="CSGTorus2" type="CSGTorus" parent="bg/sprite/Viewport/Spatial/Spatial"]
+transform = Transform( -0.129916, -0.981497, 0.140659, 0.660672, -0.191472, -0.725845, 0.739347, -0.00136966, 0.673322, 0, 0, 0 )
+inner_radius = 3.70772
+outer_radius = 3.87127
+sides = 64
+ring_sides = 4
+smooth_faces = false
+
+[node name="Camera" type="Camera" parent="bg/sprite/Viewport"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5.20782 )
+current = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="bg/sprite/Viewport"]
+environment = SubResource( 7 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="bg/sprite/Viewport"]
+autoplay = "7"
+anims/7 = SubResource( 9 )
+anims/RESET = SubResource( 10 )
+
+[node name="DirectionalLight" type="DirectionalLight" parent="bg/sprite/Viewport"]
+transform = Transform( -0.475728, -0.566743, 0.67267, 0.718634, 0.190545, 0.668774, -0.507197, 0.801558, 0.316633, 1.25127, 1.17601, -1.20874 )
+light_color = Color( 0.0470588, 0.137255, 0.352941, 1 )
+
+[node name="holo" type="NinePatchRect" parent="bg/sprite"]
+margin_left = 161.0
+margin_top = -161.0
+margin_right = 224.0
+margin_bottom = -82.0
+rect_clip_content = true
+texture = ExtResource( 17 )
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 2
+patch_margin_bottom = 2
+
+[node name="sprite" type="Sprite" parent="bg/sprite/holo"]
+show_behind_parent = true
+material = SubResource( 11 )
+position = Vector2( 68, 63 )
+texture = ExtResource( 19 )
+
+[node name="stripe" type="ColorRect" parent="bg/sprite/holo"]
+material = SubResource( 12 )
+margin_left = -1.0
+margin_right = 229.0
+margin_bottom = 230.0
+mouse_filter = 2
 
 [node name="window_container" type="Control" parent="."]
 
@@ -83,22 +313,20 @@ margin_bottom = 381.0
 mouse_filter = 2
 color = Color( 0, 0, 0, 1 )
 
-[node name="h_container" parent="start_menu/container" instance=ExtResource( 13 )]
-position = Vector2( 5, 5 )
-spacing = 2
-
-[node name="btn" parent="start_menu/container/h_container" instance=ExtResource( 6 )]
-margin_right = 138.0
-margin_bottom = 16.0
+[node name="btn" parent="start_menu/container" instance=ExtResource( 6 )]
+margin_left = 5.0
+margin_top = 5.0
+margin_right = 143.0
+margin_bottom = 21.0
 rect_clip_content = true
 script = ExtResource( 8 )
 
-[node name="ColorRect" type="ColorRect" parent="start_menu/container/h_container/btn"]
+[node name="ColorRect" type="ColorRect" parent="start_menu/container/btn"]
 margin_right = 138.0
 margin_bottom = 27.0
 mouse_filter = 2
 
-[node name="text" type="Label" parent="start_menu/container/h_container/btn"]
+[node name="text" type="Label" parent="start_menu/container/btn"]
 modulate = Color( 0, 0, 0, 1 )
 margin_left = 6.0
 margin_top = 4.0
@@ -107,7 +335,7 @@ margin_bottom = 18.0
 custom_fonts/font = SubResource( 3 )
 text = "Text editor"
 
-[node name="text2" type="Label" parent="start_menu/container/h_container/btn"]
+[node name="text2" type="Label" parent="start_menu/container/btn"]
 modulate = Color( 0, 0, 0, 1 )
 margin_left = 6.0
 margin_top = 15.0
@@ -116,180 +344,31 @@ margin_bottom = 29.0
 custom_fonts/font = SubResource( 4 )
 text = "Write down your introspection..."
 
-[node name="btn2" parent="start_menu/container/h_container" instance=ExtResource( 6 )]
-margin_right = 138.0
-margin_bottom = 16.0
-rect_clip_content = true
-script = ExtResource( 8 )
+[node name="h_container" parent="start_menu/container" instance=ExtResource( 13 )]
+position = Vector2( 5, 5 )
+spacing = 2
 
-[node name="ColorRect" type="ColorRect" parent="start_menu/container/h_container/btn2"]
-margin_right = 138.0
-margin_bottom = 27.0
-mouse_filter = 2
+[node name="settings" parent="start_menu/container" instance=ExtResource( 14 )]
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 153.0
+margin_top = 8.0
+margin_right = 184.0
+margin_bottom = 36.0
+hover_expand = 0.0
 
-[node name="text" type="Label" parent="start_menu/container/h_container/btn2"]
-modulate = Color( 0, 0, 0, 1 )
-margin_left = 6.0
-margin_top = 4.0
-margin_right = 46.0
-margin_bottom = 18.0
-custom_fonts/font = SubResource( 3 )
-text = "File browser"
-
-[node name="text2" type="Label" parent="start_menu/container/h_container/btn2"]
-modulate = Color( 0, 0, 0, 1 )
-margin_left = 6.0
-margin_top = 15.0
-margin_right = 66.0
-margin_bottom = 29.0
-custom_fonts/font = SubResource( 4 )
-text = "Stores anything"
-
-[node name="btn3" parent="start_menu/container/h_container" instance=ExtResource( 6 )]
-margin_right = 138.0
-margin_bottom = 16.0
-rect_clip_content = true
-script = ExtResource( 8 )
-
-[node name="ColorRect" type="ColorRect" parent="start_menu/container/h_container/btn3"]
-margin_right = 138.0
-margin_bottom = 27.0
-mouse_filter = 2
-
-[node name="text" type="Label" parent="start_menu/container/h_container/btn3"]
-modulate = Color( 0, 0, 0, 1 )
-margin_left = 6.0
-margin_top = 4.0
-margin_right = 46.0
-margin_bottom = 18.0
-custom_fonts/font = SubResource( 3 )
-text = "Settings"
-
-[node name="text2" type="Label" parent="start_menu/container/h_container/btn3"]
-modulate = Color( 0, 0, 0, 1 )
-margin_left = 6.0
-margin_top = 15.0
-margin_right = 46.0
-margin_bottom = 29.0
-custom_fonts/font = SubResource( 4 )
-text = "Set your things"
-
-[node name="btn4" parent="start_menu/container/h_container" instance=ExtResource( 6 )]
-margin_right = 138.0
-margin_bottom = 16.0
-rect_clip_content = true
-script = ExtResource( 8 )
-
-[node name="ColorRect" type="ColorRect" parent="start_menu/container/h_container/btn4"]
-margin_right = 138.0
-margin_bottom = 27.0
-mouse_filter = 2
-
-[node name="text" type="Label" parent="start_menu/container/h_container/btn4"]
-modulate = Color( 0, 0, 0, 1 )
-margin_left = 6.0
-margin_top = 4.0
-margin_right = 46.0
-margin_bottom = 18.0
-custom_fonts/font = SubResource( 3 )
-text = "Space Map"
-
-[node name="text2" type="Label" parent="start_menu/container/h_container/btn4"]
-modulate = Color( 0, 0, 0, 1 )
-margin_left = 6.0
-margin_top = 15.0
-margin_right = 46.0
-margin_bottom = 29.0
-custom_fonts/font = SubResource( 4 )
-text = "Is your lair safe?"
-
-[node name="btn5" parent="start_menu/container/h_container" instance=ExtResource( 6 )]
-margin_right = 138.0
-margin_bottom = 16.0
-rect_clip_content = true
-script = ExtResource( 8 )
-
-[node name="ColorRect" type="ColorRect" parent="start_menu/container/h_container/btn5"]
-margin_right = 138.0
-margin_bottom = 27.0
-mouse_filter = 2
-
-[node name="text" type="Label" parent="start_menu/container/h_container/btn5"]
-modulate = Color( 0, 0, 0, 1 )
-margin_left = 6.0
-margin_top = 4.0
-margin_right = 46.0
-margin_bottom = 18.0
-custom_fonts/font = SubResource( 3 )
-text = "Communications"
-
-[node name="text2" type="Label" parent="start_menu/container/h_container/btn5"]
-modulate = Color( 0, 0, 0, 1 )
-margin_left = 6.0
-margin_top = 15.0
-margin_right = 46.0
-margin_bottom = 29.0
-custom_fonts/font = SubResource( 4 )
-text = "Communications in domination"
-
-[node name="btn6" parent="start_menu/container/h_container" instance=ExtResource( 6 )]
-margin_right = 138.0
-margin_bottom = 16.0
-rect_clip_content = true
-script = ExtResource( 8 )
-
-[node name="ColorRect" type="ColorRect" parent="start_menu/container/h_container/btn6"]
-margin_right = 138.0
-margin_bottom = 27.0
-mouse_filter = 2
-
-[node name="text" type="Label" parent="start_menu/container/h_container/btn6"]
-modulate = Color( 0, 0, 0, 1 )
-margin_left = 6.0
-margin_top = 4.0
-margin_right = 46.0
-margin_bottom = 18.0
-custom_fonts/font = SubResource( 3 )
-text = "Weaponry"
-
-[node name="text2" type="Label" parent="start_menu/container/h_container/btn6"]
-modulate = Color( 0, 0, 0, 1 )
-margin_left = 6.0
-margin_top = 15.0
-margin_right = 91.0
-margin_bottom = 29.0
-custom_fonts/font = SubResource( 4 )
-text = "View every weapon in this planet"
-
-[node name="btn7" parent="start_menu/container/h_container" instance=ExtResource( 6 )]
-margin_right = 221.0
-margin_bottom = 16.0
-rect_clip_content = true
-script = ExtResource( 8 )
-
-[node name="ColorRect" type="ColorRect" parent="start_menu/container/h_container/btn7"]
-margin_right = 257.0
-margin_bottom = 27.0
-mouse_filter = 2
-color = Color( 1, 0, 0, 1 )
-
-[node name="text" type="Label" parent="start_menu/container/h_container/btn7"]
-modulate = Color( 0, 0, 0, 1 )
-margin_left = 6.0
-margin_top = 4.0
-margin_right = 46.0
-margin_bottom = 18.0
-custom_fonts/font = SubResource( 3 )
-text = "Action Center"
-
-[node name="text2" type="Label" parent="start_menu/container/h_container/btn7"]
-modulate = Color( 0, 0, 0, 1 )
-margin_left = 6.0
-margin_top = 15.0
-margin_right = 51.0
-margin_bottom = 29.0
-custom_fonts/font = SubResource( 4 )
-text = "Select the planet's cosmic level action"
+[node name="TextureRect" type="TextureRect" parent="start_menu/container/settings"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -12.5
+margin_top = -11.0
+margin_right = 12.5
+margin_bottom = 14.0
+texture = ExtResource( 15 )
 
 [node name="btn_basic" parent="start_menu" instance=ExtResource( 6 )]
 margin_left = -19.0
@@ -302,28 +381,43 @@ position = Vector2( 30, 9 )
 z_index = 2
 texture = ExtResource( 12 )
 
+[node name="ColorRect" type="ColorRect" parent="start_menu/btn_basic/Sprite"]
+modulate = Color( 0, 0, 0, 1 )
+show_behind_parent = true
+margin_left = -10.0
+margin_top = -9.0
+margin_right = 9.0
+margin_bottom = 31.0
+mouse_filter = 2
+
 [node name="title" type="Control" parent="start_menu"]
-margin_left = 180.0
-margin_top = 267.0
-margin_right = 282.0
-margin_bottom = 320.0
+margin_left = 1.0
+margin_top = 289.0
+margin_right = 177.0
+margin_bottom = 342.0
 rect_pivot_offset = Vector2( -191, -42 )
 rect_clip_content = true
 mouse_filter = 2
 
 [node name="ColorRect" type="ColorRect" parent="start_menu/title"]
-material = SubResource( 2 )
-margin_left = 5.0
+margin_left = 29.0
+margin_top = 20.0
+margin_right = 138.0
+margin_bottom = 40.0
+color = Color( 0, 0, 0, 1 )
+
+[node name="ColorRect2" type="ColorRect" parent="start_menu/title"]
+margin_left = 30.0
 margin_top = 21.0
-margin_right = 112.0
-margin_bottom = 31.0
+margin_right = 137.0
+margin_bottom = 39.0
 
 [node name="text" type="Label" parent="start_menu/title"]
 modulate = Color( 0, 0, 0, 1 )
-margin_left = 8.0
-margin_top = 22.0
-margin_right = 63.0
-margin_bottom = 36.0
+margin_left = 37.0
+margin_top = 26.0
+margin_right = 92.0
+margin_bottom = 40.0
 custom_fonts/font = SubResource( 3 )
 text = "HipOS"
 
@@ -333,7 +427,7 @@ script = ExtResource( 10 )
 [node name="container" type="ColorRect" parent="taskbar"]
 margin_left = -5.0
 margin_top = 344.0
-margin_right = 715.0
+margin_right = 640.0
 margin_bottom = 361.0
 mouse_filter = 2
 color = Color( 0, 0.415686, 1, 1 )
@@ -351,4 +445,91 @@ rect_clip_content = true
 color = Color( 1, 1, 1, 0 )
 
 [node name="v_container" parent="taskbar/container/ColorRect" instance=ExtResource( 5 )]
-spacing = 2
+spacing = 1
+
+[node name="window" parent="taskbar/container/ColorRect/v_container" instance=ExtResource( 6 )]
+margin_right = 61.0
+margin_bottom = 17.0
+rect_clip_content = true
+texture = ExtResource( 11 )
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 2
+patch_margin_bottom = 2
+
+[node name="rect" type="ColorRect" parent="taskbar/container/ColorRect/v_container/window"]
+show_behind_parent = true
+margin_right = 218.0
+margin_bottom = 40.0
+mouse_filter = 1
+
+[node name="text" type="Label" parent="taskbar/container/ColorRect/v_container/window"]
+modulate = Color( 0, 0, 0, 1 )
+margin_left = 4.0
+margin_top = 4.0
+margin_right = 24.0
+margin_bottom = 12.0
+custom_fonts/font = SubResource( 5 )
+text = "test"
+
+[node name="right_container" type="ColorRect" parent="taskbar/container"]
+margin_left = 526.0
+margin_right = 645.0
+margin_bottom = 18.0
+
+[node name="time" type="Control" parent="taskbar/container/right_container"]
+margin_right = 40.0
+margin_bottom = 40.0
+
+[node name="NinePatchRect" type="NinePatchRect" parent="."]
+visible = false
+margin_left = 413.0
+margin_top = 13.0
+margin_right = 623.0
+margin_bottom = 77.0
+rect_clip_content = true
+texture = ExtResource( 11 )
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 2
+patch_margin_bottom = 2
+
+[node name="wallpaper" type="ColorRect" parent="NinePatchRect"]
+show_behind_parent = true
+margin_left = -4140.0
+margin_top = -4077.0
+margin_right = 7915.0
+margin_bottom = 3233.0
+mouse_filter = 2
+color = Color( 0, 0, 0, 1 )
+
+[node name="text" type="Label" parent="NinePatchRect"]
+margin_left = 40.0
+margin_top = 12.0
+margin_right = 200.0
+margin_bottom = 38.0
+custom_fonts/font = SubResource( 3 )
+text = "Chat now with HipB0T! Our latest
+AI Assisant built in HipOS!"
+
+[node name="text2" type="Label" parent="NinePatchRect"]
+modulate = Color( 0.619608, 0.619608, 0.619608, 1 )
+margin_left = 10.0
+margin_top = 48.0
+margin_right = 170.0
+margin_bottom = 74.0
+custom_fonts/font = SubResource( 3 )
+text = "Dismiss"
+
+[node name="NinePatchRect" type="NinePatchRect" parent="NinePatchRect"]
+margin_left = 21.0
+margin_top = 11.0
+margin_right = 27.0
+margin_bottom = 17.0
+rect_rotation = 44.9999
+rect_scale = Vector2( 3, 3 )
+texture = ExtResource( 11 )
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 2
+patch_margin_bottom = 2
