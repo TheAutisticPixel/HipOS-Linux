@@ -1,2 +1,2 @@
 # HipOS
-- A toy OS made in godot engine for fun 
+- A simulated desktop environment made in godot engine for fun 
