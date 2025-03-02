@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=2]
+[gd_scene load_steps=41 format=2]
 
 [ext_resource path="res://shaders/outline.tres" type="Shader" id=1]
 [ext_resource path="res://shaders/stripes.tres" type="Shader" id=2]
@@ -13,8 +13,6 @@
 [ext_resource path="res://art/rects/rect_classic.png" type="Texture" id=11]
 [ext_resource path="res://art/icons/start.png" type="Texture" id=12]
 [ext_resource path="res://main/component_ui/v_container.tscn" type="PackedScene" id=13]
-[ext_resource path="res://main/component/button.tscn" type="PackedScene" id=14]
-[ext_resource path="res://art/icons/settings.png" type="Texture" id=15]
 [ext_resource path="res://main/scripts/viewport.gd" type="Script" id=16]
 [ext_resource path="res://art/rects/rect.png" type="Texture" id=17]
 [ext_resource path="res://shaders/scroll.gdshader" type="Shader" id=18]
@@ -23,6 +21,9 @@
 [ext_resource path="res://main/scripts/notification_messages.gd" type="Script" id=21]
 [ext_resource path="res://main/scripts/notif.gd" type="Script" id=22]
 [ext_resource path="res://main/component/btn_basic_polished.tscn" type="PackedScene" id=23]
+[ext_resource path="res://art/app_art/shooting_game/particle.png" type="Texture" id=24]
+[ext_resource path="res://art/icons/cursor.png" type="Texture" id=25]
+[ext_resource path="res://main/scripts/cursor.gd" type="Script" id=26]
 
 [sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 2 )
@@ -121,16 +122,27 @@ font_data = ExtResource( 4 )
 size = 8
 font_data = ExtResource( 3 )
 
+[sub_resource type="DynamicFont" id=17]
+size = 8
+font_data = ExtResource( 3 )
+
 [sub_resource type="StyleBoxFlat" id=13]
 bg_color = Color( 1, 1, 1, 0.0980392 )
 
 [sub_resource type="StyleBoxFlat" id=14]
 bg_color = Color( 0, 0, 0, 0 )
 
+[sub_resource type="Curve" id=15]
+_data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 0 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="Curve" id=16]
+_data = [ Vector2( 0, 0 ), 0.0, 0.0, 0, 0, Vector2( 1, 1 ), 0.0, 0.0, 0, 0 ]
+
 [node name="main" type="Node2D"]
 script = ExtResource( 9 )
 
 [node name="bg" type="Node2D" parent="."]
+modulate = Color( 0.364706, 0.443137, 0.458824, 1 )
 z_index = -4096
 
 [node name="wallpaper" type="ColorRect" parent="bg"]
@@ -255,6 +267,13 @@ sides = 64
 ring_sides = 4
 smooth_faces = false
 
+[node name="CSGTorus5" type="CSGTorus" parent="bg/sprite/Viewport/Spatial"]
+transform = Transform( 0.946697, 0.288577, -0.143138, -0.260192, 0.947007, 0.188358, 0.189908, -0.141074, 0.971613, 0, 0, 0 )
+inner_radius = 3.6463
+outer_radius = 3.94157
+sides = 64
+smooth_faces = false
+
 [node name="Camera" type="Camera" parent="bg/sprite/Viewport"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5.20782 )
 current = true
@@ -356,28 +375,6 @@ text = "Write down your introspection..."
 [node name="h_container" parent="start_menu/container" instance=ExtResource( 13 )]
 position = Vector2( 5, 14 )
 spacing = 2
-
-[node name="settings" parent="start_menu/container" instance=ExtResource( 14 )]
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_left = 153.0
-margin_top = 8.0
-margin_right = 184.0
-margin_bottom = 36.0
-hover_expand = 0.0
-
-[node name="TextureRect" type="TextureRect" parent="start_menu/container/settings"]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -12.5
-margin_top = -11.0
-margin_right = 12.5
-margin_bottom = 14.0
-texture = ExtResource( 15 )
 
 [node name="btn_basic" parent="start_menu" instance=ExtResource( 6 )]
 margin_left = -19.0
@@ -485,10 +482,25 @@ text = "test"
 margin_left = 526.0
 margin_right = 645.0
 margin_bottom = 18.0
+rect_pivot_offset = Vector2( -44, -40 )
 
-[node name="time" type="Control" parent="taskbar/container/right_container"]
-margin_right = 40.0
-margin_bottom = 40.0
+[node name="fps" type="Label" parent="taskbar/container/right_container"]
+modulate = Color( 0, 0, 0, 1 )
+margin_left = -22.0
+margin_top = 4.0
+margin_right = 18.0
+margin_bottom = 20.0
+custom_fonts/font = SubResource( 17 )
+text = "fps"
+
+[node name="time" type="Label" parent="taskbar/container/right_container"]
+modulate = Color( 0, 0, 0, 1 )
+margin_left = 78.0
+margin_top = 5.0
+margin_right = 118.0
+margin_bottom = 21.0
+custom_fonts/font = SubResource( 17 )
+text = "10:51"
 
 [node name="notification_messages" type="Control" parent="."]
 script = ExtResource( 21 )
@@ -498,11 +510,12 @@ position = Vector2( 0, 13 )
 lerp_speed = 0.2
 spacing = 0
 
-[node name="notif" type="NinePatchRect" parent="notification_messages"]
-margin_left = 411.0
+[node name="notif" type="NinePatchRect" parent="notification_messages" groups=["notif"]]
+self_modulate = Color( 1, 1, 1, 0 )
+margin_left = 617.0
 margin_top = 13.0
 margin_right = 621.0
-margin_bottom = 17.0
+margin_bottom = 47.0
 rect_clip_content = true
 texture = ExtResource( 11 )
 patch_margin_left = 2
@@ -559,3 +572,33 @@ position = Vector2( 18, 22 )
 
 [node name="anchor" type="Node2D" parent="notification_messages"]
 position = Vector2( 411, 13 )
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
+position = Vector2( 322, 198 )
+z_index = 15
+amount = 25
+lifetime_randomness = 1.0
+local_coords = false
+texture = ExtResource( 24 )
+spread = 180.0
+gravity = Vector2( 0, 0 )
+initial_velocity = 222.0
+initial_velocity_random = 1.0
+orbit_velocity_random = 1.0
+linear_accel = 128.0
+linear_accel_random = 1.0
+tangential_accel = 1110.0
+tangential_accel_random = 1.0
+damping = 1000.0
+damping_random = 1.0
+scale_amount_curve = SubResource( 15 )
+color = Color( 0.380392, 0.811765, 1, 1 )
+script = ExtResource( 26 )
+
+[node name="Line2D" type="Line2D" parent="CPUParticles2D"]
+width = 3.0
+width_curve = SubResource( 16 )
+default_color = Color( 0, 0.552941, 1, 1 )
+
+[node name="triangle" type="Sprite" parent="CPUParticles2D"]
+texture = ExtResource( 25 )

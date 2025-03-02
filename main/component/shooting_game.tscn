@@ -1,0 +1,101 @@
+[gd_scene load_steps=15 format=2]
+
+[ext_resource path="res://art/app_art/shooting_game/player.png" type="Texture" id=1]
+[ext_resource path="res://art/app_art/shooting_game/tile.png" type="Texture" id=2]
+[ext_resource path="res://main/contents_window/script/shooting_game/shooting_game.gd" type="Script" id=3]
+[ext_resource path="res://main/contents_window/script/shooting_game/player.gd" type="Script" id=4]
+[ext_resource path="res://art/app_art/shooting_game/particle.png" type="Texture" id=5]
+[ext_resource path="res://art/app_art/shooting_game/bullet.png" type="Texture" id=6]
+[ext_resource path="res://main/contents_window/script/shooting_game/bullet.gd" type="Script" id=7]
+[ext_resource path="res://main/contents_window/script/shooting_game/scene.gd" type="Script" id=8]
+[ext_resource path="res://art/app_art/shooting_game/crosshair.png" type="Texture" id=9]
+
+[sub_resource type="Curve" id=2]
+_data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 0 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="RectangleShape2D" id=1]
+
+[sub_resource type="Curve" id=3]
+_data = [ Vector2( 0, 0 ), 0.0, 1.03506, 0, 0, Vector2( 1, 1 ), 0.968313, 0.0, 0, 0 ]
+
+[sub_resource type="RectangleShape2D" id=4]
+extents = Vector2( 6, 2.5 )
+
+[sub_resource type="ViewportTexture" id=5]
+viewport_path = NodePath("game")
+
+[node name="shooting_game" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -237.0
+margin_bottom = -131.0
+rect_clip_content = true
+script = ExtResource( 3 )
+
+[node name="game" type="Viewport" parent="."]
+size = Vector2( 403, 229 )
+handle_input_locally = false
+render_target_update_mode = 3
+
+[node name="scene" type="Node2D" parent="game"]
+script = ExtResource( 8 )
+
+[node name="bg" type="Node2D" parent="game/scene"]
+
+[node name="tile" type="Sprite" parent="game/scene/bg"]
+scale = Vector2( 44, 44 )
+texture = ExtResource( 2 )
+region_enabled = true
+region_rect = Rect2( 0, 0, 15555, 15555 )
+
+[node name="player" type="KinematicBody2D" parent="game/scene"]
+position = Vector2( 318, 181 )
+script = ExtResource( 4 )
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="game/scene/player"]
+amount = 43
+lifetime_randomness = 1.0
+local_coords = false
+texture = ExtResource( 5 )
+spread = 180.0
+gravity = Vector2( 0, 0 )
+initial_velocity = 55.0
+damping = 255.0
+damping_random = 1.0
+scale_amount_curve = SubResource( 2 )
+color = Color( 0, 0.509804, 1, 1 )
+
+[node name="sprite" type="Sprite" parent="game/scene/player"]
+modulate = Color( 0, 0.647059, 1, 1 )
+texture = ExtResource( 1 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="game/scene/player"]
+shape = SubResource( 1 )
+
+[node name="trail" type="Line2D" parent="game/scene/player"]
+width_curve = SubResource( 3 )
+default_color = Color( 0.494118, 0.690196, 1, 1 )
+
+[node name="bullet" type="Area2D" parent="game/scene/player"]
+script = ExtResource( 7 )
+
+[node name="collision" type="CollisionShape2D" parent="game/scene/player/bullet"]
+position = Vector2( 0, -0.5 )
+shape = SubResource( 4 )
+
+[node name="sprite" type="Sprite" parent="game/scene/player/bullet"]
+modulate = Color( 0.517647, 0.678431, 1, 1 )
+texture = ExtResource( 6 )
+
+[node name="cam" type="Camera2D" parent="game/scene"]
+position = Vector2( 318, 181 )
+current = true
+smoothing_speed = 10.0
+
+[node name="cursor" type="Sprite" parent="game/scene"]
+texture = ExtResource( 9 )
+
+[node name="Sprite" type="Sprite" parent="."]
+position = Vector2( 202, 115 )
+scale = Vector2( 1, -1 )
+texture = SubResource( 5 )

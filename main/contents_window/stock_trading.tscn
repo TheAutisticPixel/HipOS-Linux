@@ -1,0 +1,167 @@
+[gd_scene load_steps=17 format=2]
+
+[ext_resource path="res://art/rects/rect_classic.png" type="Texture" id=1]
+[ext_resource path="res://main/contents_window/script/stock_trading/stock_trading.gd" type="Script" id=2]
+[ext_resource path="res://main/contents_window/script/stock_trading/graphs.gd" type="Script" id=3]
+[ext_resource path="res://art/app_art/stock_trading/money.png" type="Texture" id=4]
+[ext_resource path="res://art/fonts/picotron.ttf" type="DynamicFontData" id=5]
+[ext_resource path="res://art/fonts/wendy.ttf" type="DynamicFontData" id=6]
+[ext_resource path="res://art/app_art/stock_trading/icon.png" type="Texture" id=7]
+[ext_resource path="res://art/rects/rect.png" type="Texture" id=8]
+[ext_resource path="res://main/contents_window/script/stock_trading/node_drawer.gd" type="Script" id=9]
+[ext_resource path="res://art/app_art/stock_trading/dot.png" type="Texture" id=10]
+
+[sub_resource type="DynamicFont" id=1]
+size = 8
+font_data = ExtResource( 5 )
+
+[sub_resource type="StyleBoxFlat" id=4]
+content_margin_bottom = 1.0
+bg_color = Color( 0.6, 0.6, 0.6, 0 )
+border_width_bottom = 1
+border_color = Color( 0.533333, 0.533333, 0.533333, 1 )
+
+[sub_resource type="DynamicFont" id=2]
+size = 10
+font_data = ExtResource( 6 )
+
+[sub_resource type="StyleBoxFlat" id=3]
+content_margin_left = 2.0
+content_margin_right = 1.0
+bg_color = Color( 1, 1, 1, 1 )
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color( 0, 0, 0, 1 )
+
+[sub_resource type="DynamicFont" id=5]
+size = 8
+font_data = ExtResource( 5 )
+
+[sub_resource type="DynamicFont" id=6]
+size = 20
+font_data = ExtResource( 6 )
+
+[node name="stock_trading" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -237.0
+margin_bottom = -131.0
+script = ExtResource( 2 )
+
+[node name="graphs" type="NinePatchRect" parent="."]
+self_modulate = Color( 1, 1, 1, 0.45098 )
+margin_top = 42.0
+margin_right = 402.0
+margin_bottom = 194.0
+texture = ExtResource( 1 )
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 2
+patch_margin_bottom = 2
+script = ExtResource( 3 )
+
+[node name="icon" type="Sprite" parent="graphs"]
+position = Vector2( 18, 20 )
+texture = ExtResource( 4 )
+
+[node name="name" type="Label" parent="graphs"]
+margin_left = 29.0
+margin_top = 11.0
+margin_right = 134.0
+margin_bottom = 21.0
+custom_fonts/font = SubResource( 1 )
+custom_styles/normal = SubResource( 4 )
+text = "Yaoi Manufacturing"
+
+[node name="value" type="Label" parent="graphs"]
+margin_left = 30.0
+margin_top = 23.0
+margin_right = 51.0
+margin_bottom = 34.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 2 )
+custom_styles/normal = SubResource( 3 )
+text = "55 m"
+
+[node name="icon" type="Sprite" parent="graphs/value"]
+position = Vector2( 26, 6 )
+texture = ExtResource( 7 )
+
+[node name="NinePatchRect" type="NinePatchRect" parent="graphs"]
+show_behind_parent = true
+margin_top = -41.0
+margin_right = 402.0
+margin_bottom = 151.0
+rect_clip_content = true
+texture = ExtResource( 1 )
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 2
+patch_margin_bottom = 2
+
+[node name="bg" type="ColorRect" parent="graphs/NinePatchRect"]
+show_behind_parent = true
+margin_right = 425.0
+margin_bottom = 192.0
+color = Color( 0, 0, 0, 0.635294 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="graph_container" type="NinePatchRect" parent="graphs"]
+self_modulate = Color( 1, 1, 1, 0.305882 )
+margin_left = 32.0
+margin_top = 46.0
+margin_right = 379.0
+margin_bottom = 126.0
+rect_clip_content = true
+texture = ExtResource( 8 )
+patch_margin_left = 1
+patch_margin_top = 1
+patch_margin_right = 1
+patch_margin_bottom = 1
+
+[node name="bg" type="ColorRect" parent="graphs/graph_container"]
+show_behind_parent = true
+margin_right = 348.0
+margin_bottom = 80.0
+color = Color( 0, 0, 0, 1 )
+
+[node name="node_drawer" type="Node2D" parent="graphs/graph_container"]
+position = Vector2( -34, 0 )
+script = ExtResource( 9 )
+
+[node name="center" type="Position2D" parent="graphs/graph_container/node_drawer"]
+position = Vector2( 0, 38 )
+
+[node name="dot" type="Sprite" parent="graphs/graph_container/node_drawer"]
+modulate = Color( 1, 1, 1, 0.0156863 )
+position = Vector2( 0, 38 )
+texture = ExtResource( 10 )
+
+[node name="your_money" type="NinePatchRect" parent="."]
+margin_right = 401.0
+margin_bottom = 36.0
+
+[node name="title" type="Label" parent="your_money"]
+margin_left = 14.0
+margin_top = 11.0
+margin_right = 94.0
+margin_bottom = 25.0
+custom_fonts/font = SubResource( 5 )
+text = "Account balance:"
+
+[node name="money" type="Label" parent="your_money"]
+margin_left = 28.0
+margin_top = 21.0
+margin_right = 64.0
+margin_bottom = 39.0
+custom_fonts/font = SubResource( 6 )
+text = "55.00"
+
+[node name="money_icon" type="Sprite" parent="your_money"]
+position = Vector2( 21, 30 )
+scale = Vector2( 2, 2 )
+texture = ExtResource( 7 )

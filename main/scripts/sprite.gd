@@ -28,6 +28,12 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	if global.main_scene.current_state == global.main_scene.states.main:
 		count += delta / 20
+		
+		if global.main_scene.shutdown_true:
+			$Viewport/Camera.translation.z += delta * 2
+			get_parent().modulate = get_parent().modulate.linear_interpolate(Color(0.4,0.4,0.4,1),delta * 0.5)
+			
+		
 		for i in range(holograms.size()):
 			var p = holograms[i]
 			p.modulate = p.modulate.linear_interpolate(Color8(28,44,87,p.rect_position.length()),delta * 3)

@@ -113,67 +113,70 @@ var finished = false
 var add_boost = 0
 
 func _physics_process(delta: float) -> void:
+
+	if r_count < right_motions.size() - 1:
+		r_count += 1
+		
+	for i in range(r_count):
+		right_motions[i].rect_position = right_motions[i].rect_position.linear_interpolate(right_pos[i],delta * 10)
+		right_motions[i].rect_scale = right_motions[i].rect_scale.linear_interpolate(Vector2.ONE,delta * 10)
+
+	if l_count < left_motion.size() - 1:
+		l_count += 1
+		
+	for i in range(l_count):
+		left_motion[i].rect_position = left_motion[i].rect_position.linear_interpolate(left_pos[i],delta * 10)
+		left_motion[i].rect_scale = left_motion[i].rect_scale.linear_interpolate(Vector2.ONE,delta * 10)
+
+	if ra_count < rand_motion.size():
+		ra_count += 0.4
+		
+	for i in range(ra_count):
+		rand_motion[i].rect_position = rand_motion[i].rect_position.linear_interpolate(rand_pos[i],delta * 10)
+		rand_motion[i].rect_scale = rand_motion[i].rect_scale.linear_interpolate(Vector2.ONE,delta * 10)
 	
-	if not Input.is_action_pressed("CLICK"):
-		if r_count < right_motions.size() - 1:
-			r_count += 1
-			
-		for i in range(r_count):
-			right_motions[i].rect_position = right_motions[i].rect_position.linear_interpolate(right_pos[i],delta * 10)
-			right_motions[i].rect_scale = right_motions[i].rect_scale.linear_interpolate(Vector2.ONE,delta * 10)
-
-		if l_count < left_motion.size() - 1:
-			l_count += 1
-			
-		for i in range(l_count):
-			left_motion[i].rect_position = left_motion[i].rect_position.linear_interpolate(left_pos[i],delta * 10)
-			left_motion[i].rect_scale = left_motion[i].rect_scale.linear_interpolate(Vector2.ONE,delta * 10)
-
-		if ra_count < rand_motion.size():
-			ra_count += 0.4
-			
-		for i in range(ra_count):
-			rand_motion[i].rect_position = rand_motion[i].rect_position.linear_interpolate(rand_pos[i],delta * 10)
-			rand_motion[i].rect_scale = rand_motion[i].rect_scale.linear_interpolate(Vector2.ONE,delta * 10)
+	info_count -= delta
+	
+	if info_count < 0 and info_index < boot_texts.size():
+		info_count += rand_range(0,0.1)
+		var info_inst = label.duplicate()
+		info_inst.text = boot_texts[info_index]
+		info_inst.rect_position = Vector2(0,(infos.size() - add_boost) * 10)
+		$rand/info_container.add_child(info_inst)
+		infos.append(info_inst)
+		info_index += 1
+		info_inst.visible_characters = 0
+		if info_index >= boot_texts.size():
+			info_count = 0.8
+	
+	if info_count < 0 and info_index >= boot_texts.size():
+		finished = true
 		
-		info_count -= delta
+	if finished:
+		$wallpaper.modulate = $wallpaper.modulate.linear_interpolate(Color.transparent,delta * 7)
+		$right.position -= Vector2(25,-25) 
+		$left.position += Vector2(25,-25)
+		$rand.position.x -= 35
+		global.main_scene.current_state = global.main_scene.states.main
 		
-		if info_count < 0 and info_index < boot_texts.size():
-			info_count += rand_range(0,0.1)
-			var info_inst = label.duplicate()
-			info_inst.text = boot_texts[info_index]
-			info_inst.rect_position = Vector2(0,(infos.size() - add_boost) * 10)
-			$rand/info_container.add_child(info_inst)
-			infos.append(info_inst)
-			info_index += 1
-			info_inst.visible_characters = 0
-			if info_index >= boot_texts.size():
-				info_count = 0.8
-		
-		if info_count < 0 and info_index >= boot_texts.size():
-			finished = true
-			
-		if finished:
-			$wallpaper.modulate = $wallpaper.modulate.linear_interpolate(Color.transparent,delta * 7)
-			$right.position -= Vector2(25,-25) 
-			$left.position += Vector2(25,-25)
-			$rand.position.x -= 35
+		if info_count < -1:
+			global.main_scene.current_state = global.main_scene.states.main
+			queue_free()
+	else:
+		$wallpaper.modulate = $wallpaper.modulate.linear_interpolate(Color8(0,22,22255),delta * 5)
+	
+	add_boost = infos.size() - 7
+	add_boost = clamp(add_boost,0,9999)
+	for i in range(infos.size()):
+		infos[i].rect_position = infos[i].rect_position.linear_interpolate(Vector2(0,(i - add_boost)* 10),delta * 25)
+		infos[i].visible_characters += 3
+		if i < infos.size() - 1:
+			infos[i].visible_characters += 10
+	
+	if finished == true:
+		if Input.is_action_just_pressed("CLICK"):
 			global.main_scene.current_state = global.main_scene.states.main
 			
-			if info_count < -1:
-				global.main_scene.current_state = global.main_scene.states.main
-				queue_free()
-		else:
-			$wallpaper.modulate = $wallpaper.modulate.linear_interpolate(Color8(0,22,22255),delta * 5)
-		
-		add_boost = infos.size() - 7
-		add_boost = clamp(add_boost,0,9999)
-		for i in range(infos.size()):
-			infos[i].rect_position = infos[i].rect_position.linear_interpolate(Vector2(0,(i - add_boost)* 10),delta * 25)
-			infos[i].visible_characters += 3
-			if i < infos.size() - 1:
-				infos[i].visible_characters += 10
-		
+			queue_free()
 	if Input.is_action_just_pressed("CLICK"):
-		
 		finished = true

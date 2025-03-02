@@ -1,0 +1,5 @@
+extends NinePatchRect
+
+var bars = []
+
+

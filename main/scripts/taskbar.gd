@@ -8,17 +8,23 @@ func _ready() -> void:
 	
 	$container/ColorRect/v_container/window.queue_free()
 
+func _physics_process(delta: float) -> void:
+	
+	
+	$container/right_container/fps.text = str( Engine.get_frames_per_second())
+	
+	for i in range(global.windows.size()):
+		if global.windows[i].minimized:
+			btns[i].get_node("rect").modulate += (Color.black - btns[i].get_node("rect").modulate) * 0.2
+			btns[i].get_node("text").modulate += (Color.white - btns[i].get_node("text").modulate) * 0.2
+		else:
+			btns[i].get_node("rect").modulate += (Color.white - btns[i].get_node("rect").modulate) * 0.2
+			btns[i].get_node("text").modulate += (Color.black - btns[i].get_node("text").modulate) * 0.2
+
 func _input(event: InputEvent) -> void:
 	for i in range(btns.size()):
 		if btns[i].is_clicked():
 			global.windows[i].minimize()
-	
-		if global.windows[i].minimized:
-			btns[i].get_node("rect").modulate = Color.black
-			btns[i].get_node("text").modulate = Color.white
-		else:
-			btns[i].get_node("rect").modulate = Color.white
-			btns[i].get_node("text").modulate = Color.black
 	
 func refresh_windows():
 	

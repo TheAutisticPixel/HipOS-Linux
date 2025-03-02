@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://main/contents_window/script/dynamic_text_editor.gd" type="Script" id=1]
+
+[node name="dynamic_text_editor" type="Control"]
+margin_right = 641.0
+margin_bottom = 361.0
+script = ExtResource( 1 )

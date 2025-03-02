@@ -31,6 +31,13 @@ onready var icon_node = $top_window/window_name/window_icon
 onready var control = $hover/control
 onready var hover_size = $hover_size
 
+var resizable = true
+var fullscreenable = true
+var minimizable = true
+var hide_cursor = false
+
+
+
 var right_size_dragging = false
 var left_size_dragging = false
 var down_size_dragging = false
@@ -42,35 +49,45 @@ var last_down_size = 0
 var last_x_pos = 0
 var last_y_pos = 0
 
+var focused = true
+
 func _draw() -> void:
-	if get_local_mouse_position().y > 0 and get_local_mouse_position().y < window_size.y:
-		if get_local_mouse_position().x > window_size.x - 5 and get_local_mouse_position().x < window_size.x + 5:
-			draw_circle(Vector2(window_size.x,get_local_mouse_position().y),4,Color.white)
-			if Input.is_action_just_pressed("CLICK"):
-				right_size_dragging = true
-				starting_mouse_pos.x = get_global_mouse_position().x
-				starting_window_pos.x = window_size.x
-				
-		if get_local_mouse_position().x > -5 and get_local_mouse_position().x < 5:
-			draw_circle(Vector2(0,get_local_mouse_position().y),4,Color.white)
-			if Input.is_action_just_pressed("CLICK"):
-				left_size_dragging = true
-				starting_mouse_pos.x = get_global_mouse_position().x
-				starting_window_pos.x = rect_position.x
-				starting_window_size = window_size
-				
-	if get_local_mouse_position().x > 0 and get_local_mouse_position().x < window_size.x:
-		if get_local_mouse_position().y > window_size.y - 5 and get_local_mouse_position().y < window_size.y + 5:
-			draw_circle(Vector2(get_local_mouse_position().x,window_size.y),4,Color.white)
-			if Input.is_action_just_pressed("CLICK"):
-				down_size_dragging = true
-				starting_mouse_pos.y = get_global_mouse_position().y
-				starting_window_pos.y = window_size.y
-		
-		if get_local_mouse_position().y > -18 and get_local_mouse_position().y < -12:
-			draw_circle(Vector2(get_local_mouse_position().x,-12),4,Color.white)
-		
+	if resizable:
+		if get_local_mouse_position().y > 0 and get_local_mouse_position().y < window_size.y:
+			if get_local_mouse_position().x > window_size.x - 5 and get_local_mouse_position().x < window_size.x + 5:
+				draw_line(Vector2(window_size.x - 5,get_local_mouse_position().y), Vector2(window_size.x + 5,get_local_mouse_position().y), Color.white,5)
+				if Input.is_action_just_pressed("CLICK"):
+					right_size_dragging = true
+					starting_mouse_pos.x = get_global_mouse_position().x
+					starting_window_pos.x = window_size.x
+					
+			if get_local_mouse_position().x > -5 and get_local_mouse_position().x < 5:
+				draw_line(Vector2(-5,get_local_mouse_position().y), Vector2(5,get_local_mouse_position().y), Color.white,5)
+				if Input.is_action_just_pressed("CLICK"):
+					left_size_dragging = true
+					starting_mouse_pos.x = get_global_mouse_position().x
+					starting_window_pos.x = rect_position.x
+					starting_window_size = window_size
+					
+		if get_local_mouse_position().x > 0 and get_local_mouse_position().x < window_size.x:
+			if get_local_mouse_position().y > window_size.y - 5 and get_local_mouse_position().y < window_size.y + 5:
+				draw_line(Vector2(get_local_mouse_position().x,window_size.y - 5), Vector2(get_local_mouse_position().x,window_size.y + 5), Color.white,5)
+				if Input.is_action_just_pressed("CLICK"):
+					down_size_dragging = true
+					starting_mouse_pos.y = get_global_mouse_position().y
+					starting_window_pos.y = window_size.y
+			
+			if get_local_mouse_position().y > -18 and get_local_mouse_position().y < -12:
+				draw_circle(Vector2(get_local_mouse_position().x,-12),4,Color.white)
+
+
+
 func _input(event: InputEvent) -> void:
+	
+	if get_global_mouse_position().x > window_pos.x and get_global_mouse_position().x < window_size.x + window_pos.x and get_global_mouse_position().y > window_pos.y - 18 and get_global_mouse_position().y < window_size.y + window_pos.y:
+		hovered = true
+	else:
+		hovered = false
 	
 	if Input.is_action_pressed("CLICK") and right_size_dragging:
 		var mouse_delta = get_global_mouse_position().x - starting_mouse_pos.x
@@ -99,24 +116,39 @@ func _input(event: InputEvent) -> void:
 		left_size_dragging = false
 		down_size_dragging = false
 	
-#	if Input.is_action_just_pressed("CLICK"):
-#		pass
-#		if hovered:
-#			show_on_top = true
-#			$top_window/ColorRect.modulate = Color.white
-#			name_node.modulate = Color.black
-#			icon_node.modulate = Color.black
-#		else:
-#			show_on_top = false
-#			$top_window/ColorRect.modulate = Color.black
-#			name_node.modulate = Color.white
-#			icon_node.modulate = Color.white
+	if hovered:
+		if Input.is_action_pressed("CTRL") and Input.is_action_just_pressed("F"):
+			fullscreen()
+		if Input.is_action_just_pressed("CLICK"):
+			show_on_top = true
+			focused = true
+			$top_window/ColorRect.modulate = Color.white
+			
+			name_node.modulate = Color.white
+			icon_node.modulate = Color.white
+			global.focused_window = self
+	else:
+		if Input.is_action_just_pressed("CLICK"):
+			focused = false
+			show_on_top = false
+			$top_window/ColorRect.modulate = Color.black
+			
+			name_node.modulate = Color.white
+			icon_node.modulate = Color.white
 
 
 		
 func _ready() -> void:
 	$container.rect_size = Vector2.ZERO
 	rect_position *= 2.5
+
+	show_on_top = true
+	focused = true
+	$top_window/ColorRect.modulate = Color.white
+	
+	name_node.modulate = Color.white
+	icon_node.modulate = Color.white
+	global.focused_window = self
 
 func _physics_process(delta: float) -> void:
 	update()
@@ -188,15 +220,16 @@ func pan():
 			fullscreen()
 		
 func fullscreen():
-	if fullscreen == false:
-		last_windowed_pos = window_pos
-		last_windowed_size = window_size
-		window_pos = maximized_window_pos
-		window_size = maximized_window_size
-	else:
-		window_pos = last_windowed_pos
-		window_size = last_windowed_size
-	fullscreen = !fullscreen
+	if fullscreenable:
+		if fullscreen == false:
+			last_windowed_pos = window_pos
+			last_windowed_size = window_size
+			window_pos = maximized_window_pos
+			window_size = maximized_window_size
+		else:
+			window_pos = last_windowed_pos
+			window_size = last_windowed_size
+		fullscreen = !fullscreen
 	
 func minimize():
 	if minimized == false:
@@ -224,9 +257,3 @@ func _on_Button2_pressed() -> void:
 	minimize()
 
 
-func _on_hover_mouse_entered() -> void:
-	hovered = true
-
-
-func _on_hover_mouse_exited() -> void:
-	hovered = false
