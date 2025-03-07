@@ -1,0 +1,11 @@
+Model Information:
+* title:	Banana (Minion Rush)
+* source:	https://sketchfab.com/3d-models/banana-minion-rush-ab95b3acb0d04670b078ed4af6248139
+* author:	MinionRusher (https://sketchfab.com/TheMinionRusherDude)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Banana (Minion Rush)" (https://sketchfab.com/3d-models/banana-minion-rush-ab95b3acb0d04670b078ed4af6248139) by MinionRusher (https://sketchfab.com/TheMinionRusherDude) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
