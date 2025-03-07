@@ -19,6 +19,16 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://main/component/scripts/btn_basic.gd"
 }, {
+"base": "btn_basic",
+"class": "btn_polished",
+"language": "GDScript",
+"path": "res://main/component/scripts/btn_basic_polished.gd"
+}, {
+"base": "btn_polished",
+"class": "btn_start",
+"language": "GDScript",
+"path": "res://main/instances_ui/script/tiled_start_menu/start_btn_basic.gd"
+}, {
 "base": "NinePatchRect",
 "class": "dropdown",
 "language": "GDScript",
@@ -27,6 +37,8 @@ _global_script_classes=[ {
 _global_script_class_icons={
 "btn": "",
 "btn_basic": "",
+"btn_polished": "",
+"btn_start": "",
 "dropdown": ""
 }
 
@@ -46,7 +58,6 @@ window/size/height=360
 window/size/test_width=1280
 window/size/test_height=720
 window/dpi/allow_hidpi=true
-window/vsync/use_vsync=false
 mouse_cursor/custom_image="res://art/app_art/shooting_game/tile.png"
 window/stretch/mode="viewport"
 window/stretch/aspect="keep"
@@ -146,6 +157,11 @@ SHIFT={
 "events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777237,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
  ]
 }
+START={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777218,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
+ ]
+}
 
 [physics]
 
@@ -159,3 +175,9 @@ quality/intended_usage/framebuffer_allocation.mobile=1
 2d/snapping/use_gpu_pixel_snap=true
 vram_compression/import_etc=true
 vram_compression/import_etc2=false
+quality/shading/force_vertex_shading=true
+quality/shading/force_lambert_over_burley=true
+quality/shading/force_blinn_over_ggx=true
+quality/filters/anisotropic_filter_level=1
+environment/default_clear_color=Color( 0.301961, 0.301961, 0.301961, 0 )
+quality/dynamic_fonts/use_oversampling=false
