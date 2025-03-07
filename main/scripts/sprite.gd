@@ -10,7 +10,7 @@ var count = 0
 
 func _ready() -> void:
 	$holo.queue_free()
-	for i in range(50):
+	for i in range(30):
 		var holo_duplicate = holoinst.duplicate()
 		var off = Vector2(rand_range(-355,455),rand_range(-230,190))
 		holo_duplicate.rect_global_position = Vector2.ZERO

@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://main/instances_ui/script/dropdown_desktop.gd" type="Script" id=1]
 [ext_resource path="res://art/rects/rect_classic.png" type="Texture" id=2]
 [ext_resource path="res://art/fonts/picotron.ttf" type="DynamicFontData" id=3]
+[ext_resource path="res://sfx/click_light.wav" type="AudioStream" id=4]
 
 [sub_resource type="CanvasItemMaterial" id=1]
 blend_mode = 1
@@ -12,8 +13,8 @@ size = 8
 font_data = ExtResource( 3 )
 
 [node name="dropdown" type="NinePatchRect"]
-margin_right = 40.0
-margin_bottom = 40.0
+margin_right = 4.0
+margin_bottom = 4.0
 rect_clip_content = true
 texture = ExtResource( 2 )
 patch_margin_left = 2
@@ -75,3 +76,7 @@ margin_left = 4.0
 margin_top = 17.0
 margin_right = 44.0
 margin_bottom = 18.0
+
+[node name="sfx" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 4 )
+pitch_scale = 3.0

@@ -9,7 +9,6 @@
 
 [sub_resource type="DynamicFont" id=6]
 size = 8
-outline_color = Color( 0, 0, 0, 1 )
 font_data = ExtResource( 2 )
 
 [sub_resource type="DynamicFont" id=1]
@@ -60,14 +59,17 @@ margin_top = 12.0
 margin_bottom = 12.0
 mouse_filter = 2
 
-[node name="Label" type="Label" parent="top_window/window_name"]
+[node name="Label" type="RichTextLabel" parent="top_window/window_name"]
 modulate = Color( 0, 0, 0, 1 )
 margin_left = 16.0
 margin_top = -9.0
-margin_right = 81.0
+margin_right = 151.0
 margin_bottom = -1.0
-custom_fonts/font = SubResource( 6 )
-text = "Window name"
+rect_clip_content = false
+mouse_filter = 2
+custom_fonts/normal_font = SubResource( 6 )
+bbcode_enabled = true
+scroll_active = false
 
 [node name="window_icon" type="Sprite" parent="top_window/window_name"]
 modulate = Color( 0, 0, 0, 1 )

@@ -1,4 +1,4 @@
-[gd_scene load_steps=41 format=2]
+[gd_scene load_steps=42 format=2]
 
 [ext_resource path="res://shaders/outline.tres" type="Shader" id=1]
 [ext_resource path="res://shaders/stripes.tres" type="Shader" id=2]
@@ -13,6 +13,7 @@
 [ext_resource path="res://art/rects/rect_classic.png" type="Texture" id=11]
 [ext_resource path="res://art/icons/start.png" type="Texture" id=12]
 [ext_resource path="res://main/component_ui/v_container.tscn" type="PackedScene" id=13]
+[ext_resource path="res://altimit os.mp3" type="AudioStream" id=14]
 [ext_resource path="res://main/scripts/viewport.gd" type="Script" id=16]
 [ext_resource path="res://art/rects/rect.png" type="Texture" id=17]
 [ext_resource path="res://shaders/scroll.gdshader" type="Shader" id=18]
@@ -44,7 +45,7 @@ shader_param/inside = false
 shader_param/add_margins = true
 shader_param/number_of_images = Vector2( 1, 1 )
 
-[sub_resource type="ViewportTexture" id=6]
+[sub_resource type="ViewportTexture" id=18]
 viewport_path = NodePath("bg/sprite/Viewport")
 
 [sub_resource type="Environment" id=7]
@@ -139,10 +140,10 @@ _data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 0 ), 0.0, 0.0, 0, 0 ]
 _data = [ Vector2( 0, 0 ), 0.0, 0.0, 0, 0, Vector2( 1, 1 ), 0.0, 0.0, 0, 0 ]
 
 [node name="main" type="Node2D"]
+pause_mode = 2
 script = ExtResource( 9 )
 
 [node name="bg" type="Node2D" parent="."]
-modulate = Color( 0.364706, 0.443137, 0.458824, 1 )
 z_index = -4096
 
 [node name="wallpaper" type="ColorRect" parent="bg"]
@@ -161,9 +162,10 @@ margin_bottom = 527.0
 color = Color( 0.0862745, 0.0862745, 0.121569, 1 )
 
 [node name="sprite" type="Sprite" parent="bg"]
+pause_mode = 2
 material = SubResource( 8 )
 position = Vector2( 320, 180 )
-texture = SubResource( 6 )
+texture = SubResource( 18 )
 script = ExtResource( 20 )
 
 [node name="Viewport" type="Viewport" parent="bg/sprite"]
@@ -427,7 +429,13 @@ margin_bottom = 40.0
 custom_fonts/font = SubResource( 3 )
 text = "HipOS"
 
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="start_menu"]
+stream = ExtResource( 14 )
+volume_db = -80.0
+autoplay = true
+
 [node name="taskbar" type="Node2D" parent="."]
+pause_mode = 2
 script = ExtResource( 10 )
 
 [node name="container" type="ColorRect" parent="taskbar"]
@@ -503,6 +511,7 @@ custom_fonts/font = SubResource( 17 )
 text = "10:51"
 
 [node name="notification_messages" type="Control" parent="."]
+pause_mode = 2
 script = ExtResource( 21 )
 
 [node name="container" parent="notification_messages" instance=ExtResource( 13 )]
@@ -574,6 +583,7 @@ position = Vector2( 18, 22 )
 position = Vector2( 411, 13 )
 
 [node name="CPUParticles2D" type="CPUParticles2D" parent="."]
+pause_mode = 2
 position = Vector2( 322, 198 )
 z_index = 15
 amount = 25
@@ -602,3 +612,4 @@ default_color = Color( 0, 0.552941, 1, 1 )
 
 [node name="triangle" type="Sprite" parent="CPUParticles2D"]
 texture = ExtResource( 25 )
+hframes = 2

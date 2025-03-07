@@ -32,7 +32,7 @@ var icons = [
 	preload("res://art/app_art/pie_clicker/icon.png"),
 	null,
 	null,
-	preload("res://art/app_art/shooting_game/icon.png"),
+	preload("res://art/icons/settings.png"),
 	null,
 	preload("res://art/icons/power_off.png"),
 	
@@ -43,7 +43,7 @@ var buttons_dropdown = []
 onready var btn_inst = $btn.duplicate()
 onready var separetor = $separator.duplicate()
 
-
+var offset = Vector2.ZERO
 var hovered = true
 
 func _ready() -> void:
@@ -67,11 +67,18 @@ func _ready() -> void:
 			buttons_dropdown[i].get_node("icon").texture = icons[i]
 			buttons_dropdown[i].rect_min_size.x = 1
 	
-var hovered_text = ""
+	rect_position.x = clamp(rect_position.x, 0, (640 - 160) - offset.x)
+	rect_position.y = clamp(rect_position.y, 0, 360 - (15 + buttons.size() * 17))
 
+var last_hovered_text = ""
+var hovered_text = ""
 var quit = false
 
 func _physics_process(delta: float) -> void:
+	
+	if last_hovered_text != hovered_text:
+		$sfx.play()
+		last_hovered_text = hovered_text
 	
 	if not hovered:
 		if Input.is_action_just_pressed("CLICK") or Input.is_action_just_pressed("RIGHT_CLICK"):
@@ -86,7 +93,6 @@ func _physics_process(delta: float) -> void:
 		hovered = false
 		
 	if quit == false:
-		
 		rect_size.x += (160 - rect_size.x) * 0.2
 		if rect_size.x >= 155:
 			rect_size.y += (15 + buttons.size() * 17 - rect_size.y) * 0.2
@@ -95,6 +101,8 @@ func _physics_process(delta: float) -> void:
 			if count < buttons_dropdown.size():
 				count += delta * 30
 	else:
+		$ColorRect.show_on_top = true
+		$ColorRect.modulate = $ColorRect.modulate.linear_interpolate(Color.white,delta * 5)
 		rect_size.y /= 1.4
 		if rect_size.y < 5:
 			rect_size.x /= 1.4
@@ -106,8 +114,7 @@ func _physics_process(delta: float) -> void:
 		var p = buttons_dropdown[i]
 		p.rect_position = p.rect_position.linear_interpolate(Vector2(7,7) + Vector2(0,i * 17),delta * 15)
 		p.rect_size.x += (147 - p.rect_size.x) * 0.2
-		if p.rect_min_size.x == 1:
-			p.get_node("text").rect_position.x += 4
+		p.get_node("text").rect_position.x += 4
 		
 		p.get_node("icon").position = p.get_node("icon").position.linear_interpolate(Vector2(10,10),delta * 15)
 		if get_local_mouse_position().x > p.rect_position.x and get_local_mouse_position().x < p.margin_right and get_local_mouse_position().y > p.rect_position.y and get_local_mouse_position().y < p.margin_bottom:

@@ -149,10 +149,11 @@ func _ready() -> void:
 	name_node.modulate = Color.white
 	icon_node.modulate = Color.white
 	global.focused_window = self
+	name_node.bbcode_text = window_name
+	
 
 func _physics_process(delta: float) -> void:
 	update()
-	name_node.text = window_name
 	icon_node.texture = window_icon
 	
 	$top_window.rect_position = $container.rect_position + Vector2(1,-12)

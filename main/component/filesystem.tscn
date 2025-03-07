@@ -1,0 +1,53 @@
+[gd_scene format=2]
+
+[node name="filesystem" type="Node"]
+
+[node name="c" type="Node" parent="."]
+
+[node name="file1" type="Node" parent="c"]
+
+[node name="file2" type="Node" parent="c"]
+
+[node name="file3" type="Node" parent="c"]
+
+[node name="file4" type="Node" parent="c"]
+
+[node name="file" type="Node" parent="c/file4"]
+
+[node name="file2" type="Node" parent="c/file4"]
+
+[node name="file" type="Node" parent="c/file4/file2"]
+
+[node name="file2" type="Node" parent="c/file4/file2"]
+
+[node name="file3" type="Node" parent="c/file4/file2"]
+
+[node name="file3" type="Node" parent="c/file4"]
+
+[node name="file4" type="Node" parent="c/file4"]
+
+[node name="d" type="Node" parent="."]
+
+[node name="file1" type="Node" parent="d"]
+
+[node name="file1" type="Node" parent="d/file1"]
+
+[node name="file1" type="Node" parent="d/file1/file1"]
+
+[node name="file2" type="Node" parent="d/file1"]
+
+[node name="file1" type="Node" parent="d/file1/file2"]
+
+[node name="file1" type="Node" parent="d/file1/file2/file1"]
+
+[node name="file2" type="Node" parent="d"]
+
+[node name="file1" type="Node" parent="d/file2"]
+
+[node name="file1" type="Node" parent="d/file2/file1"]
+
+[node name="file2" type="Node" parent="d/file2/file1"]
+
+[node name="file3" type="Node" parent="d/file2/file1"]
+
+[node name="file4" type="Node" parent="d/file2/file1"]

@@ -23,8 +23,10 @@ func _ready() -> void:
 	var startup_inst = startup.instance()
 	add_child(startup_inst)
 	$CPUParticles2D/Line2D.set_as_toplevel(true)
-
+	
+	
 var shutdown_scene = preload("res://main/instances_ui/shutdown_screen.tscn")
+
 func shutdown():
 	$start_menu.hide()
 	$taskbar.hide()
@@ -35,10 +37,21 @@ func shutdown():
 	add_child(shutdown_inst)
 	
 var last_pos = Vector2.ZERO
+var click_fx = preload("res://main/instances_ui/click_effect.tscn")
 	
 func _process(delta: float) -> void:
-	$CPUParticles2D.position = get_local_mouse_position() + Vector2.ONE * 8
+	$CPUParticles2D.position = get_local_mouse_position() + Vector2.ONE * 7
 	
+#	if Input.is_action_just_pressed("CLICK"):
+#		var click_fx_inst = click_fx.instance()
+#		click_fx_inst.position = get_local_mouse_position() 
+#		click_fx_inst.get_node("AnimationPlayer").playback_speed = 2
+#		add_child(click_fx_inst)
+
+	if Input.is_action_pressed("CLICK"):
+		$CPUParticles2D/triangle.frame = 1
+	else:
+		$CPUParticles2D/triangle.frame = 0
 	
 	if is_instance_valid(global.focused_window):
 		if global.focused_window.hide_cursor and global.focused_window.hovered:
@@ -49,12 +62,19 @@ func _process(delta: float) -> void:
 			$CPUParticles2D.show()
 		
 		if global.focused_window.hovered == false:
+				
 			if Input.is_action_just_pressed("RIGHT_CLICK"):
 				global.make_dropdown()
+				global.make_dropdown(preload("res://main/instances_ui/start_menu_dropdown.tscn"), Vector2(-200,0))
 	else:
+#		if Input.is_action_just_pressed("RIGHT_CLICK"):
+#			global.make_dropdown(preload("res://main/instances_ui/file_browser_dropdown.tscn"))
+				
 		if Input.is_action_just_pressed("RIGHT_CLICK"):
-				global.make_dropdown()
-	
+			global.make_dropdown()
+			global.make_dropdown(preload("res://main/instances_ui/start_menu_dropdown.tscn"), Vector2(-160,0))
+			
+			
 	if last_pos != get_local_mouse_position():
 		$CPUParticles2D.emitting = true
 		last_pos = get_local_mouse_position()

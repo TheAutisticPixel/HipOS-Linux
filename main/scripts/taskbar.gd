@@ -36,6 +36,7 @@ func refresh_windows():
 	for i in range(global.windows.size()):
 		var window_inst = window_dupe.duplicate()
 		window_inst.get_node("text").text = global.windows[i].window_name
+		window_inst.rect_size.x = 7 + global.windows[i].window_name.length() * 5
 		$container/ColorRect/v_container.add_child(window_inst)
 		btns.append(window_inst)
 		
